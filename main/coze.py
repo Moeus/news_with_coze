@@ -1,43 +1,44 @@
 """
-This example describes how to use the workflow interface to chat.
+此示例描述了如何使用工作流接口进行聊天。
 """
-
+import liuguang_note_api
+import json
 import os
-# Our official coze sdk for Python [cozepy](https://github.com/coze-dev/coze-py)
+# 我们官方的 Python 版 Coze SDK [cozepy](https://github.com/coze-dev/coze-py)
 from cozepy import COZE_CN_BASE_URL
 
-# Get an access_token through personal access token or oauth.
+# 通过个人访问令牌或 OAuth 获取访问令牌。
 coze_api_token = 'pat_yUmVBjZAhTbmF90GZjKcysB7UrTKQ4GevS33z5AadZQxqweT4Jni0ZdlDIiKBTLA'
-# The default access is api.coze.com, but if you need to access api.coze.cn,
-# please use base_url to configure the api endpoint to access
+# 默认访问地址是 api.coze.com，但如果你需要访问 api.coze.cn，
+# 请使用 base_url 来配置要访问的 API 端点
 coze_api_base = COZE_CN_BASE_URL
 
-from cozepy import Coze, TokenAuth, Message, ChatStatus, MessageContentType  # noqa
-
-
+from cozepy import Coze, TokenAuth, Message, ChatStatus, MessageContentType 
 
 try:
-    # Init the Coze client through the access_token.
+    # 通过访问令牌初始化 Coze 客户端。
     coze = Coze(auth=TokenAuth(token=coze_api_token), base_url=coze_api_base)
 
-    # Create a workflow instance in Coze, copy the last number from the web link as the workflow's ID.
+    # 在 Coze 中创建一个工作流实例，从网页链接中复制最后一个数字作为工作流的 ID。
     workflow_id = '7475598695737229346'
 
-    # Define the parameters for the workflow run
+    # 定义工作流运行的参数
     parameters = {
         "secret_key": "Moeus"
     }
 
-    # Call the coze.workflows.runs.create method to create a workflow run. The create method
-    # is a non-streaming chat and will return a WorkflowRunResult class.
+    # 调用 coze.workflows.runs.create 方法来创建一个工作流运行实例
+    # 是非流式聊天，将返回一个 WorkflowRunResult 类的对象。
     workflow = coze.workflows.runs.create(
         workflow_id=workflow_id,
-        parameters=parameters  # Add the parameters to the workflow run
+        parameters=parameters  # 将参数添加到工作流运行中
     )
-
-    print("workflow.data", workflow.data)
-    context=workflow.data["result"]
-
+    print(type(workflow.data))
+    print(workflow.data)
+    result_json=json.loads(workflow.data)
+    context = result_json["result"]
+    context="".join(context.split("\n"))
+    print(context)
+    print(liuguang_note_api.get_png(content=context))
 except Exception as e:
-    print(f"An error occurred: {e}")
-
+    print(f"发生错误: {e}")
