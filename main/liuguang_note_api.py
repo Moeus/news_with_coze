@@ -1,6 +1,7 @@
 import requests
 import json
 import time
+import os
 # 获取当前时间的时间元组
 current_time = time.localtime()
 # 提取年、月、日
@@ -13,6 +14,11 @@ def get_png(content):
     target_url = "https://fireflycard-api.302ai.cn/api/saveImg"
 
     try:
+        # 获取当前脚本所在的目录
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        # 更改工作目录
+        os.chdir(script_dir)
+        print(script_dir)
         # 打开 JSON 文件，使用 'r' 模式以文本形式读取，并指定编码为 UTF-8
         with open("api.json", 'r', encoding='utf-8') as file:
             # 使用 json.load() 函数从文件对象中读取并解析 JSON 数据

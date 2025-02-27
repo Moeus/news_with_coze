@@ -36,6 +36,7 @@ try:
     print(type(workflow.data))
     print(workflow.data)
     result_json=json.loads(workflow.data)
+    print("超过解析json")
     context = result_json["result"]
     context="".join(context.split("\n"))
     print(context)
